@@ -1,8 +1,20 @@
 /* =========================
-   AUTO DISCOVERY
+   RENE AI ENGINE
 ========================= */
 
-let discoveredRoutes = []
+const input =
+
+document.getElementById(
+  "searchInput"
+)
+
+const orb =
+
+document.getElementById(
+  "reneOrb"
+)
+
+let websiteMap = []
 
 let memory = JSON.parse(
 
@@ -14,50 +26,58 @@ let memory = JSON.parse(
 
 
 /* =========================
-   SCAN WEBSITE
+   AUTO DISCOVER WEBSITE
 ========================= */
 
-function scanWebsite(){
+function buildWebsiteMap(){
 
-  discoveredRoutes = []
+  websiteMap = []
 
-  const elements =
+  const allElements =
 
-  parent.document.querySelectorAll(
-    "section, div, nav"
-  )
+  parent.document.querySelectorAll(`
+    section,
+    nav,
+    a,
+    button,
+    div,
+    h1,
+    h2,
+    h3,
+    h4,
+    p
+  `)
 
-  elements.forEach(el=>{
-
-    const id = el.id
-
-    if(!id) return
+  allElements.forEach(el=>{
 
     const text =
 
-    el.innerText
-    .toLowerCase()
-
-    .replace(/[^\w\s]/g,"")
-
-    .split(" ")
-
-    .filter(word=>
-
-      word.length > 2
+    (
+      el.innerText ||
+      el.textContent ||
+      ""
     )
 
-    .slice(0,25)
+    .trim()
 
-    discoveredRoutes.push({
+    .toLowerCase()
 
-      keywords:[
-        id.toLowerCase(),
-        ...text
-      ],
+    if(text.length < 2) return
 
-      target:
-      `#${id}`
+    const rect =
+
+    el.getBoundingClientRect()
+
+    websiteMap.push({
+
+      element:el,
+
+      text:text,
+
+      top:
+      rect.top +
+
+      parent.window.scrollY
     })
 
   })
@@ -66,12 +86,103 @@ function scanWebsite(){
 
 
 /* =========================
-   MEMORY SAVE
+   SMART SEARCH
 ========================= */
 
-function saveSearch(query){
+function smartSearch(query){
 
   query = query.toLowerCase()
+
+  saveMemory(query)
+
+  let bestMatch = null
+
+  let bestScore = 0
+
+  websiteMap.forEach(item=>{
+
+    let score = 0
+
+    if(
+      item.text.includes(query)
+    ){
+
+      score += 10
+    }
+
+    const words =
+
+    query.split(" ")
+
+    words.forEach(word=>{
+
+      if(
+        item.text.includes(word)
+      ){
+
+        score += 2
+      }
+
+    })
+
+    if(score > bestScore){
+
+      bestScore = score
+
+      bestMatch = item
+    }
+
+  })
+
+  if(bestMatch){
+
+    bestMatch.element
+    .scrollIntoView({
+
+      behavior:"smooth",
+      block:"center"
+    })
+
+    pulseElement(
+      bestMatch.element
+    )
+
+  }else{
+
+    shakeBar()
+
+  }
+
+}
+
+
+/* =========================
+   SEARCH ENTER
+========================= */
+
+input.addEventListener(
+
+  "keydown",
+
+  (e)=>{
+
+    if(e.key === "Enter"){
+
+      smartSearch(
+        input.value
+      )
+
+    }
+
+  }
+)
+
+
+/* =========================
+   MEMORY
+========================= */
+
+function saveMemory(query){
 
   if(memory[query]){
 
@@ -89,166 +200,109 @@ function saveSearch(query){
     JSON.stringify(memory)
   )
 
-  renderMemory()
 }
 
 
 /* =========================
-   MEMORY RENDER
+   PULSE TARGET
 ========================= */
 
-function renderMemory(){
+function pulseElement(el){
 
-  const list =
+  el.style.transition =
+  "0.4s"
 
-  document.getElementById(
-    "memoryList"
+  el.style.boxShadow =
+  "0 0 40px rgba(170,0,255,0.8)"
+
+  el.style.transform =
+  "scale(1.02)"
+
+  setTimeout(()=>{
+
+    el.style.boxShadow = ""
+
+    el.style.transform = ""
+
+  },1200)
+
+}
+
+
+/* =========================
+   SHAKE BAR
+========================= */
+
+function shakeBar(){
+
+  const bar =
+
+  document.querySelector(
+    ".rene-bar"
   )
 
-  list.innerHTML = ""
+  bar.animate([
 
-  const sorted =
+    {
+      transform:
+      "translateX(-6px)"
+    },
 
-  Object.entries(memory)
+    {
+      transform:
+      "translateX(6px)"
+    },
 
-  .sort((a,b)=>
+    {
+      transform:
+      "translateX(-4px)"
+    },
 
-    b[1] - a[1]
-
-  )
-
-  .slice(0,8)
-
-  sorted.forEach(item=>{
-
-    const keyword = item[0]
-
-    const chip =
-    document.createElement("div")
-
-    chip.className =
-    "memory-chip"
-
-    chip.innerText =
-    keyword
-
-    chip.onclick = ()=>{
-
-      quickSearch(keyword)
+    {
+      transform:
+      "translateX(0)"
     }
 
-    list.appendChild(chip)
+  ],{
 
+    duration:400
   })
+
 }
 
 
 /* =========================
-   SEARCH
+   BOT FOLLOW
 ========================= */
 
-function searchSite(){
+document.addEventListener(
 
-  const input =
-
-  document
-  .getElementById(
-    "searchInput"
-  )
-
-  .value
-  .toLowerCase()
-
-  if(!input) return
-
-  saveSearch(input)
-
-  for(
-    let route of
-    discoveredRoutes
-  ){
-
-    const matched =
-
-    route.keywords.some(
-      keyword=>
-
-      input.includes(keyword)
-    )
-
-    if(matched){
-
-      const target =
-
-      parent.document.querySelector(
-        route.target
-      )
-
-      if(target){
-
-        target.scrollIntoView({
-
-          behavior:"smooth",
-          block:"start"
-        })
-
-        return
-      }
-
-    }
-
-  }
-
-  window.open(
-
-    "https://google.com/search?q="
-
-    + encodeURIComponent(input),
-
-    "_blank"
-  )
-}
-
-
-/* =========================
-   ENTER
-========================= */
-
-document
-.getElementById(
-  "searchInput"
-)
-
-.addEventListener(
-
-  "keydown",
+  "mousemove",
 
   (e)=>{
 
-    if(e.key === "Enter"){
+    const x =
 
-      searchSite()
-    }
+    (
+      window.innerWidth / 2
+      - e.clientX
+    ) / 25
 
+    const y =
+
+    (
+      window.innerHeight / 2
+      - e.clientY
+    ) / 25
+
+    orb.style.transform =
+
+    `
+    rotateY(${-x}deg)
+    rotateX(${y}deg)
+    `
   }
 )
-
-
-/* =========================
-   QUICK SEARCH
-========================= */
-
-function quickSearch(text){
-
-  document
-  .getElementById(
-    "searchInput"
-  )
-
-  .value = text
-
-  searchSite()
-}
 
 
 /* =========================
@@ -279,49 +333,11 @@ function closePortal(){
 
 
 /* =========================
-   BOT FOLLOW
-========================= */
-
-const orb =
-
-document.getElementById(
-  "reneOrb"
-)
-
-document.addEventListener(
-
-  "mousemove",
-
-  (e)=>{
-
-    const x =
-
-    (
-      window.innerWidth / 2
-      - e.clientX
-    ) / 35
-
-    const y =
-
-    (
-      window.innerHeight / 2
-      - e.clientY
-    ) / 35
-
-    orb.style.transform =
-
-    `
-    rotateY(${-x}deg)
-    rotateX(${y}deg)
-    `
-  }
-)
-
-
-/* =========================
    INIT
 ========================= */
 
-scanWebsite()
+setTimeout(()=>{
 
-renderMemory()
+  buildWebsiteMap()
+
+},1500)
