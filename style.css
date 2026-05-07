@@ -550,3 +550,46 @@ pre{
   }
 
 }
+
+.rene-highlight{
+
+  display:inline;
+}
+
+.rene-mark{
+
+  background:
+  rgba(170,0,255,0.35);
+
+  color:white;
+
+  padding:2px 4px;
+
+  border-radius:6px;
+
+  box-shadow:
+  0 0 12px rgba(170,0,255,0.7);
+
+  animation:
+  pulseMark 1.8s infinite;
+}
+
+
+@keyframes pulseMark{
+
+  0%{
+    box-shadow:
+    0 0 8px rgba(170,0,255,0.4);
+  }
+
+  50%{
+    box-shadow:
+    0 0 18px rgba(170,0,255,0.9);
+  }
+
+  100%{
+    box-shadow:
+    0 0 8px rgba(170,0,255,0.4);
+  }
+
+}
