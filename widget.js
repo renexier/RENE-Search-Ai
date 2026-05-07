@@ -1,251 +1,334 @@
 <script>
-document.addEventListener("DOMContentLoaded",()=>{
+(()=>{
 
-const old=document.querySelector(".rene-panel")
+if(document.getElementById("rene-ai"))return
 
-if(old) old.remove()
+const css=`
+#rene-ai{
+position:fixed;
+left:50%;
+bottom:20px;
+transform:translateX(-50%);
+width:min(92vw,850px);
+z-index:999999;
+font-family:Inter,sans-serif;
+pointer-events:none
+}
+#rene-bar{
+height:72px;
+border-radius:999px;
+display:flex;
+align-items:center;
+gap:14px;
+padding:0 14px;
+pointer-events:auto;
+background:linear-gradient(135deg,rgba(15,15,30,.92),rgba(25,25,45,.65));
+backdrop-filter:blur(25px);
+border:1px solid rgba(255,255,255,.08);
+box-shadow:0 0 40px rgba(128,0,255,.18);
+position:relative;
+overflow:hidden
+}
+#rene-bar:before{
+content:"";
+position:absolute;
+top:0;
+left:-200px;
+width:120px;
+height:100%;
+background:linear-gradient(90deg,transparent,rgba(255,255,255,.13),transparent);
+transform:skewX(-25deg);
+animation:shine 4s linear infinite
+}
+@keyframes shine{
+0%{left:-200px}
+100%{left:120%}
+}
+#rene-avatar{
+width:48px;
+height:48px;
+border-radius:50%;
+object-fit:cover;
+box-shadow:0 0 20px rgba(170,0,255,.45);
+transition:.15s
+}
+#rene-input{
+flex:1;
+background:none;
+border:none;
+outline:none;
+font-size:16px;
+color:#fff
+}
+#rene-input::placeholder{
+color:rgba(255,255,255,.45)
+}
+#rene-info{
+width:44px;
+height:44px;
+border:none;
+border-radius:50%;
+background:linear-gradient(135deg,#9b4dff,#6d5cff);
+color:#fff;
+font-weight:700;
+cursor:pointer
+}
+.rene-mark{
+outline:2px solid rgba(180,80,255,.9)!important;
+border-radius:10px!important;
+box-shadow:0 0 24px rgba(170,0,255,.45)!important;
+transition:.2s
+}
+#rene-panel{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.55);
+backdrop-filter:blur(10px);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:9999999
+}
+#rene-box{
+width:min(92vw,950px);
+background:linear-gradient(135deg,#080814,#050510);
+border:1px solid rgba(255,255,255,.08);
+border-radius:34px;
+padding:42px;
+color:#fff;
+position:relative
+}
+#rene-box h1{
+font-size:70px;
+margin:0 0 10px
+}
+#rene-box h1 span{
+color:#b57cff
+}
+.rene-card{
+margin-top:22px;
+padding:28px;
+border-radius:28px;
+background:rgba(255,255,255,.03);
+border:1px solid rgba(255,255,255,.06)
+}
+.rene-card h2{
+margin:0 0 10px;
+color:#b57cff
+}
+#rene-close{
+position:absolute;
+right:20px;
+top:20px;
+font-size:28px;
+cursor:pointer;
+opacity:.7
+}
+@media(max-width:700px){
+#rene-box h1{font-size:46px}
+#rene-bar{height:64px}
+}
+`
 
-const panel=document.createElement("div")
-panel.className="rene-panel"
+document.head.insertAdjacentHTML(
+"beforeend",
+`<style>${css}</style>`
+)
 
-panel.innerHTML=`
+document.body.insertAdjacentHTML(
+"beforeend",
+`
+<div id="rene-ai">
+<div id="rene-bar">
+<img id="rene-avatar" src="https://raw.githubusercontent.com/renexier/RENE-Search-Ai/main/rene-bot.png">
+<input id="rene-input" placeholder="Ask RENE anything...">
+<button id="rene-info">i</button>
+</div>
+</div>
 
-<div class="rene-wrap">
+<div id="rene-panel">
+<div id="rene-box">
 
-<button class="rene-close">×</button>
+<div id="rene-close">×</div>
 
-<h1>
-Ask <span>RENE</span>
-</h1>
+<h1>Ask <span>RENE</span></h1>
 
-<p class="rene-sub">
+<p style="opacity:.7">
 Adaptive AI Website Navigation Layer
 </p>
 
 <div class="rene-card">
-<h2>SMART WEBSITE SEARCH</h2>
+<h2>AUTO DISCOVERY</h2>
 <p>
-RENE intelligently scans your Framer website and finds matching sections, pages, text blocks, buttons, services, portfolios, and navigation links in real time.
+RENE intelligently scans pages, sections,
+buttons and content automatically.
 </p>
 </div>
 
 <div class="rene-card">
-<h2>LIVE TEXT DISCOVERY</h2>
+<h2>SMART PAGE NAVIGATION</h2>
 <p>
-Search behaves like PDF keyword search. RENE highlights matching content visually without damaging your website design or layout structure.
+Finds matching pages like Home,
+About, Projects and Contact instantly.
 </p>
 </div>
 
 <div class="rene-card">
-<h2>ARROW NAVIGATION</h2>
+<h2>LIVE TEXT SEARCH</h2>
 <p>
-Use ↑ and ↓ keys to jump between multiple keyword matches instantly across your website sections.
+Highlights matching text directly on the
+website without damaging visuals.
+Arrow keys navigate between results.
 </p>
 </div>
 
 <div class="rene-card">
-<h2>FRAMER AUTO PAGE DETECTION</h2>
+<h2>AI MEMORY</h2>
 <p>
-RENE automatically detects Framer page links like Home, About, Projects, Contact and navigates intelligently without manual setup.
+Learns repeated search patterns and adapts
+future suggestions intelligently.
 </p>
 </div>
 
 <div class="rene-card">
-<h2>AI MEMORY SYSTEM</h2>
+<h2>GLASS UI ENGINE</h2>
 <p>
-Learns visitor search behavior patterns locally and improves future keyword suggestions dynamically.
+Premium floating glassmorphism interface
+with adaptive lighting and motion effects.
 </p>
 </div>
 
 <div class="rene-card">
-<h2>GLASSMORPHIC UI ENGINE</h2>
-<p>
-Premium futuristic floating UI with adaptive glow, hover effects, responsive scaling, smooth animations, and mouse-reactive avatar motion.
-</p>
-</div>
-
-<div class="rene-card">
-<h2>SAFE WEBSITE INTEGRATION</h2>
-<p>
-Built specifically to avoid breaking Framer layouts, theme colors, sections, typography, responsiveness, and page structure.
-</p>
-</div>
-
-<div class="rene-card">
-<h2>EMBED ANYWHERE</h2>
-<p>
-RENE can be installed into portfolios, SaaS websites, agencies, dashboards, AI tools, product showcases, and business landing pages.
-</p>
-</div>
-
-<div class="rene-install">
-<h2>INSTALL</h2>
-
-<code>
+<h2>WEBSITE INSTALL</h2>
+<p style="font-family:monospace;opacity:.8">
 &lt;script src="https://renexier.github.io/RENE-Search-Ai/widget.js"&gt;&lt;/script&gt;
-</code>
-</div>
-
-<div class="rene-footer">
-
-<p>
-Created by :
-<span>
-Mayank Alias Renexier
-</span>
 </p>
-
-<a
-href="https://github.com/renexier"
-target="_blank"
->
-Visit GitHub to know more
-</a>
-
 </div>
 
+<div style="margin-top:28px;opacity:.75">
+Created by : <span style="color:#b57cff">Mayank Alias Renexier</span>
+<br><br>
+Visit GitHub to know more
+</div>
+
+</div>
 </div>
 `
+)
 
-document.body.appendChild(panel)
+const i=document.getElementById("rene-input")
+const p=document.getElementById("rene-panel")
+const inf=document.getElementById("rene-info")
+const cls=document.getElementById("rene-close")
+const av=document.getElementById("rene-avatar")
 
-document.querySelector(".rene-close")
-.onclick=()=>panel.remove()
+let marks=[]
+let idx=0
+
+function clearMarks(){
+marks.forEach(e=>e.classList.remove("rene-mark"))
+marks=[]
+idx=0
+}
+
+function search(q){
+
+clearMarks()
+
+if(!q.trim())return
+
+q=q.toLowerCase()
+
+const pages=[...document.querySelectorAll("a")]
+
+for(let a of pages){
+
+const t=(a.innerText||"").toLowerCase()
+
+if(
+t===q||
+t.includes(q)
+){
+a.click()
+return
+}
+}
+
+document.querySelectorAll(
+"h1,h2,h3,h4,h5,p,span,li,a,button"
+).forEach(el=>{
+
+if(el.closest("#rene-ai"))return
+
+const txt=(el.innerText||"").toLowerCase()
+
+if(txt.includes(q)){
+
+el.classList.add("rene-mark")
+
+marks.push(el)
+}
+})
+
+if(marks[0]){
+marks[0].scrollIntoView({
+behavior:"smooth",
+block:"center"
+})
+}
+}
+
+function nav(n){
+
+if(!marks.length)return
+
+idx=(n+marks.length)%marks.length
+
+marks[idx].scrollIntoView({
+behavior:"smooth",
+block:"center"
+})
+}
+
+i.addEventListener("input",e=>{
+search(e.target.value)
+})
+
+i.addEventListener("keydown",e=>{
+
+if(e.key==="ArrowDown"){
+e.preventDefault()
+nav(idx+1)
+}
+
+if(e.key==="ArrowUp"){
+e.preventDefault()
+nav(idx-1)
+}
+
+if(e.key==="Escape"){
+clearMarks()
+i.value=""
+}
 
 })
+
+inf.onclick=()=>p.style.display="flex"
+
+cls.onclick=()=>p.style.display="none"
+
+p.onclick=e=>{
+if(e.target===p)p.style.display="none"
+}
+
+document.addEventListener("mousemove",e=>{
+
+const x=(innerWidth/2-e.clientX)/35
+const y=(innerHeight/2-e.clientY)/35
+
+av.style.transform=
+`rotateY(${-x}deg) rotateX(${y}deg)`
+})
+
+})()
 </script>
-
-<style>
-
-.rene-panel{
-position:fixed;
-inset:0;
-z-index:999999999;
-background:rgba(0,0,0,.55);
-backdrop-filter:blur(12px);
-display:flex;
-justify-content:center;
-align-items:center;
-padding:20px;
-font-family:Inter,sans-serif;
-}
-
-.rene-wrap{
-width:min(960px,95vw);
-max-height:92vh;
-overflow:auto;
-padding:42px;
-border-radius:38px;
-background:
-linear-gradient(
-145deg,
-rgba(10,10,30,.96),
-rgba(5,5,18,.98)
-);
-border:1px solid rgba(255,255,255,.08);
-box-shadow:
-0 0 60px rgba(140,0,255,.2);
-position:relative;
-}
-
-.rene-wrap h1{
-font-size:72px;
-margin:0;
-color:#fff;
-font-weight:800;
-}
-
-.rene-wrap h1 span{
-color:#b57cff;
-}
-
-.rene-sub{
-color:#aaa;
-font-size:20px;
-margin:10px 0 40px;
-}
-
-.rene-card,
-.rene-install{
-padding:28px;
-margin-bottom:22px;
-border-radius:26px;
-background:
-linear-gradient(
-145deg,
-rgba(255,255,255,.03),
-rgba(255,255,255,.01)
-);
-border:1px solid rgba(255,255,255,.06);
-}
-
-.rene-card h2,
-.rene-install h2{
-margin:0 0 14px;
-font-size:18px;
-color:#b57cff;
-}
-
-.rene-card p,
-.rene-install code{
-color:#cfcfcf;
-line-height:1.7;
-font-size:16px;
-}
-
-.rene-install code{
-display:block;
-padding:18px;
-border-radius:16px;
-background:rgba(255,255,255,.03);
-overflow:auto;
-}
-
-.rene-footer{
-margin-top:30px;
-color:#888;
-}
-
-.rene-footer span{
-color:#b57cff;
-}
-
-.rene-footer a{
-display:inline-block;
-margin-top:10px;
-color:#fff;
-text-decoration:none;
-opacity:.8;
-}
-
-.rene-close{
-position:absolute;
-top:18px;
-right:18px;
-width:52px;
-height:52px;
-border:none;
-border-radius:50%;
-background:rgba(255,255,255,.06);
-color:#fff;
-font-size:28px;
-cursor:pointer;
-}
-
-@media(max-width:768px){
-
-.rene-wrap{
-padding:26px;
-}
-
-.rene-wrap h1{
-font-size:48px;
-}
-
-.rene-sub{
-font-size:16px;
-}
-
-}
-
-</style>
