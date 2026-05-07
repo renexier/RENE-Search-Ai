@@ -1,5 +1,5 @@
 /* =========================
-   RENE AI ENGINE
+   ELEMENTS
 ========================= */
 
 const input =
@@ -14,223 +14,149 @@ document.getElementById(
   "reneOrb"
 )
 
-let websiteMap = []
-
-let memory = JSON.parse(
-
-  localStorage.getItem(
-    "reneMemory"
-  )
-
-) || {}
+let activeHighlights = []
 
 
 /* =========================
-   AUTO DISCOVER WEBSITE
+   CLEAR HIGHLIGHTS
 ========================= */
 
-function buildWebsiteMap(){
+function clearHighlights(){
 
-  websiteMap = []
+  activeHighlights.forEach(el=>{
 
-  const allElements =
+    const parent =
+    el.parentNode
 
-  parent.document.querySelectorAll(`
-    section,
-    nav,
-    a,
-    button,
-    div,
-    h1,
-    h2,
-    h3,
-    h4,
-    p
-  `)
+    parent.replaceChild(
 
-  allElements.forEach(el=>{
+      document.createTextNode(
+        el.textContent
+      ),
 
-    const text =
-
-    (
-      el.innerText ||
-      el.textContent ||
-      ""
+      el
     )
 
-    .trim()
-
-    .toLowerCase()
-
-    if(text.length < 2) return
-
-    const rect =
-
-    el.getBoundingClientRect()
-
-    websiteMap.push({
-
-      element:el,
-
-      text:text,
-
-      top:
-      rect.top +
-
-      parent.window.scrollY
-    })
+    parent.normalize()
 
   })
 
+  activeHighlights = []
 }
 
 
 /* =========================
-   SMART SEARCH
+   SEARCH WEBSITE TEXT
 ========================= */
 
-function smartSearch(query){
+function searchWebsite(query){
 
-  query = query.toLowerCase()
+  clearHighlights()
 
-  saveMemory(query)
+  if(!query) return
 
-  let bestMatch = null
+  query =
+  query.toLowerCase()
 
-  let bestScore = 0
+  const walker =
 
-  websiteMap.forEach(item=>{
+  parent.document.createTreeWalker(
 
-    let score = 0
+    parent.document.body,
+
+    NodeFilter.SHOW_TEXT
+  )
+
+  let node
+
+  while(
+    node = walker.nextNode()
+  ){
+
+    const text =
+    node.textContent
 
     if(
-      item.text.includes(query)
+      text.toLowerCase()
+      .includes(query)
     ){
 
-      score += 10
+      const span =
+      parent.document
+      .createElement("span")
+
+      span.className =
+      "rene-highlight"
+
+      const regex =
+      new RegExp(
+        `(${query})`,
+        "gi"
+      )
+
+      span.innerHTML =
+
+      text.replace(
+
+        regex,
+
+        `
+        <mark
+        class="rene-mark">
+
+        $1
+
+        </mark>
+        `
+      )
+
+      node.parentNode
+      .replaceChild(
+        span,
+        node
+      )
+
+      activeHighlights.push(span)
+
     }
 
-    const words =
+  }
 
-    query.split(" ")
+  scrollToFirstResult()
+}
 
-    words.forEach(word=>{
 
-      if(
-        item.text.includes(word)
-      ){
+/* =========================
+   SCROLL FIRST RESULT
+========================= */
 
-        score += 2
-      }
+function scrollToFirstResult(){
 
-    })
+  const first =
 
-    if(score > bestScore){
+  parent.document.querySelector(
+    ".rene-mark"
+  )
 
-      bestScore = score
+  if(first){
 
-      bestMatch = item
-    }
-
-  })
-
-  if(bestMatch){
-
-    bestMatch.element
-    .scrollIntoView({
+    first.scrollIntoView({
 
       behavior:"smooth",
+
       block:"center"
     })
-
-    pulseElement(
-      bestMatch.element
-    )
 
   }else{
 
     shakeBar()
-
   }
 
 }
 
 
 /* =========================
-   SEARCH ENTER
-========================= */
-
-input.addEventListener(
-
-  "keydown",
-
-  (e)=>{
-
-    if(e.key === "Enter"){
-
-      smartSearch(
-        input.value
-      )
-
-    }
-
-  }
-)
-
-
-/* =========================
-   MEMORY
-========================= */
-
-function saveMemory(query){
-
-  if(memory[query]){
-
-    memory[query]++
-
-  }else{
-
-    memory[query] = 1
-  }
-
-  localStorage.setItem(
-
-    "reneMemory",
-
-    JSON.stringify(memory)
-  )
-
-}
-
-
-/* =========================
-   PULSE TARGET
-========================= */
-
-function pulseElement(el){
-
-  el.style.transition =
-  "0.4s"
-
-  el.style.boxShadow =
-  "0 0 40px rgba(170,0,255,0.8)"
-
-  el.style.transform =
-  "scale(1.02)"
-
-  setTimeout(()=>{
-
-    el.style.boxShadow = ""
-
-    el.style.transform = ""
-
-  },1200)
-
-}
-
-
-/* =========================
-   SHAKE BAR
+   SHAKE
 ========================= */
 
 function shakeBar(){
@@ -269,6 +195,45 @@ function shakeBar(){
   })
 
 }
+
+
+/* =========================
+   SEARCH INPUT
+========================= */
+
+input.addEventListener(
+
+  "input",
+
+  ()=>{
+
+    searchWebsite(
+      input.value
+    )
+
+  }
+)
+
+
+/* =========================
+   ENTER
+========================= */
+
+input.addEventListener(
+
+  "keydown",
+
+  (e)=>{
+
+    if(e.key === "Escape"){
+
+      input.value = ""
+
+      clearHighlights()
+    }
+
+  }
+)
 
 
 /* =========================
@@ -330,14 +295,3 @@ function closePortal(){
   .classList
   .remove("active")
 }
-
-
-/* =========================
-   INIT
-========================= */
-
-setTimeout(()=>{
-
-  buildWebsiteMap()
-
-},1500)
