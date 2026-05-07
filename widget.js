@@ -6,7 +6,7 @@
   )
 
   iframe.src =
-  "https://YOUR-USERNAME.github.io/RENE-FLOATING/"
+  "https://renexier.github.io/RENE-FLOATING/"
 
   iframe.style.position =
   "fixed"
