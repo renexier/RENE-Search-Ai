@@ -1,334 +1,324 @@
-<script>
 (()=>{
+if(document.getElementById("rene-search"))return
 
-if(document.getElementById("rene-ai"))return
-
-const css=`
-#rene-ai{
+document.body.insertAdjacentHTML("beforeend",`
+<style>
+#rene-search{
 position:fixed;
 left:50%;
-bottom:20px;
+bottom:90px;
 transform:translateX(-50%);
-width:min(92vw,850px);
+width:min(92vw,760px);
 z-index:999999;
 font-family:Inter,sans-serif;
+transition:.35s;
+-webkit-user-select:none;
+user-select:none
+}
+#rene-search.hide{
+opacity:0;
+transform:translateX(-50%) translateY(120px);
 pointer-events:none
 }
 #rene-bar{
-height:72px;
-border-radius:999px;
+height:68px;
 display:flex;
 align-items:center;
-gap:14px;
-padding:0 14px;
-pointer-events:auto;
-background:linear-gradient(135deg,rgba(15,15,30,.92),rgba(25,25,45,.65));
-backdrop-filter:blur(25px);
+gap:10px;
+padding:0 12px;
+border-radius:999px;
+background:rgba(10,10,20,.82);
+backdrop-filter:blur(18px);
 border:1px solid rgba(255,255,255,.08);
-box-shadow:0 0 40px rgba(128,0,255,.18);
-position:relative;
-overflow:hidden
+box-shadow:0 0 30px rgba(120,0,255,.18);
+overflow:hidden;
+position:relative
 }
 #rene-bar:before{
 content:"";
 position:absolute;
 top:0;
-left:-200px;
+left:-140px;
 width:120px;
 height:100%;
-background:linear-gradient(90deg,transparent,rgba(255,255,255,.13),transparent);
-transform:skewX(-25deg);
-animation:shine 4s linear infinite
+background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);
+transform:skewX(-20deg);
+animation:s 5s linear infinite
 }
-@keyframes shine{
-0%{left:-200px}
+@keyframes s{
+0%{left:-140px}
 100%{left:120%}
 }
 #rene-avatar{
-width:48px;
-height:48px;
+width:46px;
+height:46px;
 border-radius:50%;
 object-fit:cover;
-box-shadow:0 0 20px rgba(170,0,255,.45);
-transition:.15s
+box-shadow:0 0 20px rgba(170,0,255,.4);
+transition:.15s;
+pointer-events:none
 }
 #rene-input{
 flex:1;
 background:none;
 border:none;
 outline:none;
-font-size:16px;
-color:#fff
+color:#fff;
+font-size:16px
 }
 #rene-input::placeholder{
 color:rgba(255,255,255,.45)
 }
-#rene-info{
-width:44px;
-height:44px;
+#rene-btn{
+width:42px;
+height:42px;
 border:none;
 border-radius:50%;
-background:linear-gradient(135deg,#9b4dff,#6d5cff);
+background:linear-gradient(135deg,#a855f7,#6d5cff);
 color:#fff;
-font-weight:700;
+font-size:18px;
 cursor:pointer
 }
-.rene-mark{
-outline:2px solid rgba(180,80,255,.9)!important;
-border-radius:10px!important;
-box-shadow:0 0 24px rgba(170,0,255,.45)!important;
-transition:.2s
-}
-#rene-panel{
+#rene-note{
 position:fixed;
-inset:0;
-background:rgba(0,0,0,.55);
-backdrop-filter:blur(10px);
-display:none;
-align-items:center;
-justify-content:center;
-z-index:9999999
-}
-#rene-box{
-width:min(92vw,950px);
-background:linear-gradient(135deg,#080814,#050510);
-border:1px solid rgba(255,255,255,.08);
-border-radius:34px;
-padding:42px;
+left:50%;
+bottom:170px;
+transform:translateX(-50%);
+background:rgba(15,15,25,.95);
 color:#fff;
-position:relative
-}
-#rene-box h1{
-font-size:70px;
-margin:0 0 10px
-}
-#rene-box h1 span{
-color:#b57cff
-}
-.rene-card{
-margin-top:22px;
-padding:28px;
-border-radius:28px;
-background:rgba(255,255,255,.03);
-border:1px solid rgba(255,255,255,.06)
-}
-.rene-card h2{
-margin:0 0 10px;
-color:#b57cff
-}
-#rene-close{
-position:absolute;
-right:20px;
-top:20px;
-font-size:28px;
-cursor:pointer;
-opacity:.7
+padding:10px 16px;
+border-radius:18px;
+font-size:14px;
+border:1px solid rgba(255,255,255,.08);
+box-shadow:0 0 25px rgba(140,0,255,.25);
+opacity:0;
+pointer-events:none;
+transition:.25s;
+z-index:999999;
+max-width:90vw;
+text-align:center
 }
 @media(max-width:700px){
-#rene-box h1{font-size:46px}
-#rene-bar{height:64px}
+#rene-search{
+width:94vw;
+bottom:85px
 }
-`
+#rene-bar{
+height:64px
+}
+}
+</style>
 
-document.head.insertAdjacentHTML(
-"beforeend",
-`<style>${css}</style>`
-)
-
-document.body.insertAdjacentHTML(
-"beforeend",
-`
-<div id="rene-ai">
+<div id="rene-search">
 <div id="rene-bar">
-<img id="rene-avatar" src="https://raw.githubusercontent.com/renexier/RENE-Search-Ai/main/rene-bot.png">
-<input id="rene-input" placeholder="Ask RENE anything...">
-<button id="rene-info">i</button>
-</div>
-</div>
 
-<div id="rene-panel">
-<div id="rene-box">
+<img
+id="rene-avatar"
+src="https://raw.githubusercontent.com/renexier/RENE-Search-Ai/main/rene-bot.png"
+>
 
-<div id="rene-close">×</div>
+<input id="rene-input">
 
-<h1>Ask <span>RENE</span></h1>
-
-<p style="opacity:.7">
-Adaptive AI Website Navigation Layer
-</p>
-
-<div class="rene-card">
-<h2>AUTO DISCOVERY</h2>
-<p>
-RENE intelligently scans pages, sections,
-buttons and content automatically.
-</p>
-</div>
-
-<div class="rene-card">
-<h2>SMART PAGE NAVIGATION</h2>
-<p>
-Finds matching pages like Home,
-About, Projects and Contact instantly.
-</p>
-</div>
-
-<div class="rene-card">
-<h2>LIVE TEXT SEARCH</h2>
-<p>
-Highlights matching text directly on the
-website without damaging visuals.
-Arrow keys navigate between results.
-</p>
-</div>
-
-<div class="rene-card">
-<h2>AI MEMORY</h2>
-<p>
-Learns repeated search patterns and adapts
-future suggestions intelligently.
-</p>
-</div>
-
-<div class="rene-card">
-<h2>GLASS UI ENGINE</h2>
-<p>
-Premium floating glassmorphism interface
-with adaptive lighting and motion effects.
-</p>
-</div>
-
-<div class="rene-card">
-<h2>WEBSITE INSTALL</h2>
-<p style="font-family:monospace;opacity:.8">
-&lt;script src="https://renexier.github.io/RENE-Search-Ai/widget.js"&gt;&lt;/script&gt;
-</p>
-</div>
-
-<div style="margin-top:28px;opacity:.75">
-Created by : <span style="color:#b57cff">Mayank Alias Renexier</span>
-<br><br>
-Visit GitHub to know more
-</div>
+<button id="rene-btn">⌕</button>
 
 </div>
 </div>
-`
+
+<div id="rene-note"></div>
+`)
+
+const s=document.getElementById("rene-search"),
+i=document.getElementById("rene-input"),
+b=document.getElementById("rene-btn"),
+a=document.getElementById("rene-avatar"),
+n=document.getElementById("rene-note")
+
+const w=[
+...new Set(
+[...document.querySelectorAll(
+"h1,h2,h3,h4,h5,a,button,li"
+)]
+.map(e=>
+(e.innerText||"")
+.replace(/\s+/g," ")
+.trim()
+.toLowerCase()
+)
+.filter(t=>
+t&&
+t.length>2&&
+t.length<20&&
+!t.includes("\n")&&
+!/^[0-9]+$/.test(t)
+)
+)
+]
+
+if(!w.length){
+
+w.push(
+"projects",
+"contact",
+"services",
+"portfolio",
+"about"
 )
 
-const i=document.getElementById("rene-input")
-const p=document.getElementById("rene-panel")
-const inf=document.getElementById("rene-info")
-const cls=document.getElementById("rene-close")
-const av=document.getElementById("rene-avatar")
-
-let marks=[]
-let idx=0
-
-function clearMarks(){
-marks.forEach(e=>e.classList.remove("rene-mark"))
-marks=[]
-idx=0
 }
 
-function search(q){
+let wi=0,ci=0,d=0
 
-clearMarks()
+function p(){
 
-if(!q.trim())return
+if(i.value)return setTimeout(p,400)
 
-q=q.toLowerCase()
+let t=`Try ${w[wi]}`
 
-const pages=[...document.querySelectorAll("a")]
+i.placeholder=t.substring(0,ci)
 
-for(let a of pages){
+if(!d){
 
-const t=(a.innerText||"").toLowerCase()
+ci++
 
-if(
-t===q||
-t.includes(q)
-){
-a.click()
-return
-}
+if(ci>t.length){
+
+d=1
+return setTimeout(p,1200)
+
 }
 
-document.querySelectorAll(
-"h1,h2,h3,h4,h5,p,span,li,a,button"
-).forEach(el=>{
+}else{
 
-if(el.closest("#rene-ai"))return
+ci--
 
-const txt=(el.innerText||"").toLowerCase()
+if(ci<0){
 
-if(txt.includes(q)){
+d=0
+wi=(wi+1)%w.length
 
-el.classList.add("rene-mark")
-
-marks.push(el)
 }
+
+}
+
+setTimeout(p,d?35:70)
+
+}
+
+p()
+
+function note(t){
+
+n.innerHTML=t
+n.style.opacity=1
+
+clearTimeout(n.t)
+
+n.t=setTimeout(()=>{
+n.style.opacity=0
+},3000)
+
+}
+
+function search(){
+
+let q=i.value.trim().toLowerCase()
+
+if(!q)return
+
+if(q=="top"){
+
+scrollTo({
+top:0,
+behavior:"smooth"
 })
 
-if(marks[0]){
-marks[0].scrollIntoView({
+return note("⬆️ Top")
+
+}
+
+if(q=="bottom"||q=="end"){
+
+scrollTo({
+top:document.body.scrollHeight,
+behavior:"smooth"
+})
+
+return note("⬇️ Bottom")
+
+}
+
+let e=[
+...document.querySelectorAll(
+"h1,h2,h3,h4,h5,p,span,a,button,li"
+)
+]
+
+let f=e.find(x=>
+!x.closest("#rene-search") &&
+(x.innerText||"")
+.toLowerCase()
+.includes(q)
+)
+
+if(f){
+
+f.scrollIntoView({
 behavior:"smooth",
 block:"center"
 })
-}
-}
 
-function nav(n){
+note(`✨ Found ${q}`)
 
-if(!marks.length)return
+}else{
 
-idx=(n+marks.length)%marks.length
+note(
+`⚠️ Invalid keyword<br>Try: <b>${
+w.sort(()=>.5-Math.random())
+.slice(0,3)
+.join(" • ")
+}</b>`
+)
 
-marks[idx].scrollIntoView({
-behavior:"smooth",
-block:"center"
-})
-}
-
-i.addEventListener("input",e=>{
-search(e.target.value)
-})
-
-i.addEventListener("keydown",e=>{
-
-if(e.key==="ArrowDown"){
-e.preventDefault()
-nav(idx+1)
 }
 
-if(e.key==="ArrowUp"){
-e.preventDefault()
-nav(idx-1)
 }
 
-if(e.key==="Escape"){
-clearMarks()
-i.value=""
+b.onclick=search
+
+i.onkeydown=e=>{
+if(e.key=="Enter")search()
 }
 
-})
+addEventListener("mousemove",e=>{
 
-inf.onclick=()=>p.style.display="flex"
+let x=(innerWidth/2-e.clientX)/35,
+y=(innerHeight/2-e.clientY)/35
 
-cls.onclick=()=>p.style.display="none"
-
-p.onclick=e=>{
-if(e.target===p)p.style.display="none"
-}
-
-document.addEventListener("mousemove",e=>{
-
-const x=(innerWidth/2-e.clientX)/35
-const y=(innerHeight/2-e.clientY)/35
-
-av.style.transform=
+a.style.transform=
 `rotateY(${-x}deg) rotateX(${y}deg)`
+
+})
+
+addEventListener("scroll",()=>{
+
+let bottom=
+innerHeight+scrollY>=
+document.body.offsetHeight-5
+
+s.classList.toggle("hide",bottom)
+
+})
+
+document.addEventListener(
+"copy",
+e=>e.preventDefault()
+)
+
+document.addEventListener(
+"contextmenu",
+e=>{
+if(e.target.closest("#rene-search"))
+e.preventDefault()
 })
 
 })()
-</script>
