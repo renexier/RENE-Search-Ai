@@ -3,224 +3,284 @@
 
 <head>
 
-  <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-  <meta
-  name="viewport"
-  content="
-  width=device-width,
-  initial-scale=1.0,
-  maximum-scale=1.0,
-  user-scalable=no
-  ">
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1.0">
 
-  <title>RENE AI</title>
+<title>RENE AI</title>
 
-  <link
-  rel="stylesheet"
-  href="style.css">
+<meta
+name="description"
+content="RENE AI • Adaptive Website Navigation Layer by Renexier">
 
-  <link rel="preconnect"
-  href="https://fonts.googleapis.com">
+<link
+rel="preconnect"
+href="https://fonts.googleapis.com">
 
-  <link rel="preconnect"
-  href="https://fonts.gstatic.com"
-  crossorigin>
+<link
+rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
 
-  <link
-  href="
-  https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap
-  "
-  rel="stylesheet">
+<link
+href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+<link
+rel="stylesheet"
+href="./style.css">
+
+<link
+rel="icon"
+href="./rene-bot.png">
 
 </head>
 
 <body>
 
 
-  <!-- FLOATING RENE -->
+<!-- BACKGROUND -->
 
-  <div class="rene-wrapper">
+<div class="bg-grid"></div>
 
 
-    <!-- SEARCH BAR -->
+<!-- RENE -->
 
-    <div class="rene-bar">
+<div class="rene-wrapper">
 
 
-      <!-- SHINE -->
+<!-- SEARCH BAR -->
 
-      <div class="shine"></div>
+<div class="rene-bar">
 
 
-      <!-- AVATAR -->
+<div class="shine"></div>
 
-      <div class="avatar-wrap">
 
-        <div class="avatar-glow"></div>
+<!-- AVATAR -->
 
-        <img
-        src="./rene-bot.png"
-        id="reneOrb"
-        class="avatar"
-        alt="RENE">
+<div class="avatar-wrap">
 
-      </div>
+<div class="avatar-glow"></div>
 
+<img
+src="./rene-bot.png"
+id="reneOrb"
+class="avatar"
+alt="RENE AI">
 
-      <!-- INPUT -->
+</div>
 
-      <input
-      type="text"
-      id="searchInput"
-      placeholder="Ask RENE anything...">
 
+<!-- INPUT -->
 
-      <!-- INFO -->
+<input
+type="text"
+id="searchInput"
+autocomplete="off"
+placeholder="Try projects...">
 
-      <button
-      class="info-btn"
-      onclick="openPortal()">
 
-        i
+<!-- SEARCH -->
 
-      </button>
+<button
+class="search-btn"
+id="searchBtn">
 
-    </div>
+⌕
 
+</button>
 
-    <!-- MEMORY -->
 
-    <div
-    class="memory-list"
-    id="memoryList">
+<!-- INFO -->
 
-    </div>
+<button
+class="info-btn"
+onclick="openPortal()">
 
-  </div>
+i
 
+</button>
 
+</div>
 
-  <!-- FULL PORTAL -->
 
-  <div
-  class="portal"
-  id="portal">
+<!-- MEMORY -->
 
+<div
+class="memory-list"
+id="memoryList">
 
-    <div class="portal-content">
+</div>
 
+</div>
 
-      <!-- CLOSE -->
 
-      <button
-      class="close-btn"
-      onclick="closePortal()">
 
-        ✕
+<!-- PORTAL -->
 
-      </button>
+<div
+class="portal"
+id="portal">
 
 
-      <!-- TITLE -->
+<div class="portal-content">
 
-      <h1>
 
-        Ask
-        <span>RENE</span>
+<!-- CLOSE -->
 
-      </h1>
+<button
+class="close-btn"
+onclick="closePortal()">
 
+✕
 
-      <p class="portal-subtitle">
+</button>
 
-        Adaptive AI Website Navigation Layer
 
-      </p>
+<!-- TITLE -->
 
+<h1>
 
-      <!-- BOX -->
+Ask
+<span>RENE</span>
 
-      <div class="portal-box">
+</h1>
 
-        <h2>
-          AUTO DISCOVERY
-        </h2>
 
-        <p>
+<p class="portal-subtitle">
 
-          RENE scans websites
-          automatically and learns
-          sections intelligently.
+Adaptive AI Website Navigation Layer
 
-        </p>
+</p>
 
-      </div>
 
 
-      <!-- BOX -->
+<!-- CARD -->
 
-      <div class="portal-box">
+<div class="portal-box">
 
-        <h2>
-          AI MEMORY
-        </h2>
+<h2>
+AUTO DISCOVERY
+</h2>
 
-        <p>
+<p>
 
-          Learns user search patterns
-          and adapts suggestions.
+RENE scans websites automatically,
+detects sections intelligently,
+and adapts navigation dynamically.
 
-        </p>
+</p>
 
-      </div>
+</div>
 
 
-      <!-- BOX -->
 
-      <div class="portal-box">
+<!-- CARD -->
 
-        <h2>
-          WEBSITE INSTALL
-        </h2>
+<div class="portal-box">
+
+<h2>
+SMART NAVIGATION
+</h2>
+
+<p>
+
+Navigate instantly through
+projects, services, contact pages,
+content blocks and sections.
+
+</p>
+
+</div>
+
+
+
+<!-- CARD -->
+
+<div class="portal-box">
+
+<h2>
+AI MEMORY
+</h2>
+
+<p>
+
+RENE remembers search patterns
+and evolves suggestions over time.
+
+</p>
+
+</div>
+
+
+
+<!-- CARD -->
+
+<div class="portal-box">
+
+<h2>
+LIVE SEARCH ENGINE
+</h2>
+
+<p>
+
+Find matching content instantly
+with adaptive keyword detection
+across any website.
+
+</p>
+
+</div>
+
+
+
+<!-- CARD -->
+
+<div class="portal-box">
+
+<h2>
+EMBED INSTALL
+</h2>
 
 <pre>
-&lt;script
-src="https://yourdomain.com/widget.js"&gt;
-&lt;/script&gt;
+&lt;script src="https://renexier.github.io/RENE-FLOATING/widget.js"&gt;&lt;/script&gt;
 </pre>
 
-      </div>
+</div>
 
 
-      <!-- CREDIT -->
 
-      <div class="credit">
+<!-- CREDIT -->
 
-        <div>
+<div class="credit">
 
-          Created by :
-          <span>Mayank</span>
+<div>
 
-        </div>
+Created by :
+<span>Mayank • Renexier</span>
 
-        <a
-        href="https://github.com/"
-        target="_blank">
+</div>
 
-          Visit GitHub to know more
+<a
+href="https://github.com/renexier"
+target="_blank">
 
-        </a>
+Explore GitHub
 
-      </div>
+</a>
 
-
-    </div>
-
-  </div>
+</div>
 
 
-  <script src="script.js"></script>
+</div>
+
+</div>
+
+
+<script src="./script.js"></script>
 
 </body>
 </html>
