@@ -593,3 +593,46 @@ pre{
   }
 
 }
+.rene-custom-box{
+margin-top:26px;
+padding:22px;
+border-radius:26px;
+background:rgba(255,255,255,.03);
+border:1px solid rgba(255,255,255,.06);
+backdrop-filter:blur(12px);
+}
+
+.rene-custom-box h3{
+margin:0 0 12px;
+font-size:24px;
+font-weight:700;
+color:#b57cff;
+}
+
+.rene-custom-box p{
+margin:0;
+line-height:1.7;
+font-size:15px;
+color:rgba(255,255,255,.72);
+}
+
+.rene-custom-btn{
+display:inline-block;
+margin-top:18px;
+padding:12px 18px;
+border-radius:999px;
+text-decoration:none;
+background:linear-gradient(
+135deg,
+#a855f7,
+#6d5cff
+);
+color:white;
+font-weight:600;
+transition:.25s;
+}
+
+.rene-custom-btn:hover{
+transform:translateY(-2px);
+box-shadow:0 0 25px rgba(160,90,255,.35);
+}
