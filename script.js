@@ -1,297 +1,505 @@
-/* =========================
-   ELEMENTS
-========================= */
-
-const input =
-
+const input=
 document.getElementById(
-  "searchInput"
+"searchInput"
 )
 
-const orb =
-
+const orb=
 document.getElementById(
-  "reneOrb"
+"reneOrb"
 )
 
-let activeHighlights = []
+const memoryList=
+document.getElementById(
+"memoryList"
+)
 
+let marks=[]
+let current=0
 
-/* =========================
-   CLEAR HIGHLIGHTS
-========================= */
+/* =====================
+MEMORY
+===================== */
 
-function clearHighlights(){
+function saveMemory(q){
 
-  activeHighlights.forEach(el=>{
+let m=JSON.parse(
+localStorage.getItem(
+"rene-memory"
+)||"[]"
+)
 
-    const parent =
-    el.parentNode
+m.unshift(q)
 
-    parent.replaceChild(
+m=[...new Set(m)]
+.slice(0,8)
 
-      document.createTextNode(
-        el.textContent
-      ),
+localStorage.setItem(
+"rene-memory",
+JSON.stringify(m)
+)
 
-      el
-    )
-
-    parent.normalize()
-
-  })
-
-  activeHighlights = []
-}
-
-
-/* =========================
-   SEARCH WEBSITE TEXT
-========================= */
-
-function searchWebsite(query){
-
-  clearHighlights()
-
-  if(!query) return
-
-  query =
-  query.toLowerCase()
-
-  const walker =
-
-  parent.document.createTreeWalker(
-
-    parent.document.body,
-
-    NodeFilter.SHOW_TEXT
-  )
-
-  let node
-
-  while(
-    node = walker.nextNode()
-  ){
-
-    const text =
-    node.textContent
-
-    if(
-      text.toLowerCase()
-      .includes(query)
-    ){
-
-      const span =
-      parent.document
-      .createElement("span")
-
-      span.className =
-      "rene-highlight"
-
-      const regex =
-      new RegExp(
-        `(${query})`,
-        "gi"
-      )
-
-      span.innerHTML =
-
-      text.replace(
-
-        regex,
-
-        `
-        <mark
-        class="rene-mark">
-
-        $1
-
-        </mark>
-        `
-      )
-
-      node.parentNode
-      .replaceChild(
-        span,
-        node
-      )
-
-      activeHighlights.push(span)
-
-    }
-
-  }
-
-  scrollToFirstResult()
-}
-
-
-/* =========================
-   SCROLL FIRST RESULT
-========================= */
-
-function scrollToFirstResult(){
-
-  const first =
-
-  parent.document.querySelector(
-    ".rene-mark"
-  )
-
-  if(first){
-
-    first.scrollIntoView({
-
-      behavior:"smooth",
-
-      block:"center"
-    })
-
-  }else{
-
-    shakeBar()
-  }
+renderMemory()
 
 }
 
+function renderMemory(){
 
-/* =========================
-   SHAKE
-========================= */
+let m=JSON.parse(
+localStorage.getItem(
+"rene-memory"
+)||"[]"
+)
+
+memoryList.innerHTML=""
+
+m.forEach(x=>{
+
+const c=
+document.createElement("div")
+
+c.className=
+"memory-chip"
+
+c.innerText=x
+
+c.onclick=()=>{
+
+input.value=x
+searchWebsite(x)
+
+}
+
+memoryList.appendChild(c)
+
+})
+
+}
+
+renderMemory()
+
+/* =====================
+CLEAR
+===================== */
+
+function clearMarks(){
+
+marks.forEach(m=>{
+
+const p=m.parentNode
+
+p.replaceChild(
+document.createTextNode(
+m.textContent
+),
+m
+)
+
+p.normalize()
+
+})
+
+marks=[]
+
+}
+
+/* =====================
+SEARCH
+===================== */
+
+function searchWebsite(q){
+
+clearMarks()
+
+if(!q)return
+
+q=q.toLowerCase()
+
+/* ROUTES */
+
+const route=
+RENE_CONFIG.routes.find(r=>
+
+r.keywords.some(k=>
+q.includes(k)
+)
+
+)
+
+if(route){
+
+location.href=route.url
+
+return
+
+}
+
+if(q==="home"||q==="top"){
+
+scrollTo({
+top:0,
+behavior:"smooth"
+})
+
+return
+
+}
+
+if(q==="end"||q==="bottom"){
+
+scrollTo({
+top:
+document.body.scrollHeight,
+behavior:"smooth"
+})
+
+return
+
+}
+
+const walker=
+document.createTreeWalker(
+
+document.body,
+
+NodeFilter.SHOW_TEXT
+
+)
+
+let node
+
+while(
+node=walker.nextNode()
+){
+
+if(
+!node.parentElement ||
+node.parentElement.closest(
+".rene-wrapper"
+)
+)continue
+
+const text=
+node.textContent
+
+if(
+text.toLowerCase()
+.includes(q)
+){
+
+const span=
+document.createElement(
+"span"
+)
+
+span.className=
+"rene-highlight"
+
+span.innerHTML=
+text.replace(
+
+new RegExp(
+`(${q})`,
+"gi"
+),
+
+`
+<mark class="rene-mark">
+$1
+</mark>
+`
+
+)
+
+node.parentNode
+.replaceChild(
+span,
+node
+)
+
+marks.push(
+...span.querySelectorAll(
+".rene-mark"
+)
+)
+
+}
+
+}
+
+if(marks.length){
+
+current=0
+
+marks[current]
+.scrollIntoView({
+
+behavior:"smooth",
+
+block:"center"
+
+})
+
+saveMemory(q)
+
+}else{
+
+shakeBar()
+
+}
+
+}
+
+/* =====================
+NEXT RESULT
+===================== */
+
+function nextResult(){
+
+if(!marks.length)return
+
+current++
+
+if(current>=marks.length)
+current=0
+
+marks[current]
+.scrollIntoView({
+
+behavior:"smooth",
+
+block:"center"
+
+})
+
+}
+
+/* =====================
+SHAKE
+===================== */
 
 function shakeBar(){
 
-  const bar =
+document.querySelector(
+".rene-bar"
+)
 
-  document.querySelector(
-    ".rene-bar"
-  )
+.animate([
 
-  bar.animate([
+{
+transform:
+"translateX(-6px)"
+},
 
-    {
-      transform:
-      "translateX(-6px)"
-    },
+{
+transform:
+"translateX(6px)"
+},
 
-    {
-      transform:
-      "translateX(6px)"
-    },
+{
+transform:
+"translateX(-4px)"
+},
 
-    {
-      transform:
-      "translateX(-4px)"
-    },
+{
+transform:
+"translateX(0)"
+}
 
-    {
-      transform:
-      "translateX(0)"
-    }
+],{
 
-  ],{
+duration:400
 
-    duration:400
-  })
+})
 
 }
 
-
-/* =========================
-   SEARCH INPUT
-========================= */
-
-input.addEventListener(
-
-  "input",
-
-  ()=>{
-
-    searchWebsite(
-      input.value
-    )
-
-  }
-)
-
-
-/* =========================
-   ENTER
-========================= */
+/* =====================
+INPUT
+===================== */
 
 input.addEventListener(
+"keydown",
+e=>{
 
-  "keydown",
+if(e.key==="Enter"){
 
-  (e)=>{
-
-    if(e.key === "Escape"){
-
-      input.value = ""
-
-      clearHighlights()
-    }
-
-  }
+searchWebsite(
+input.value
 )
 
+}
 
-/* =========================
-   BOT FOLLOW
-========================= */
+if(e.key==="ArrowDown"){
+
+nextResult()
+
+}
+
+if(e.key==="Escape"){
+
+input.value=""
+
+clearMarks()
+
+}
+
+})
+
+/* =====================
+ROTATING PROMPTS
+===================== */
+
+let prompts=[
+
+"This is RENE Search",
+
+"Navigate through website",
+
+"Try home",
+
+"Try end"
+
+]
+
+document.querySelectorAll(
+"h1,h2,h3,a,button,li"
+)
+
+.forEach(e=>{
+
+const t=
+(e.innerText||"")
+.trim()
+.toLowerCase()
+
+if(
+t &&
+t.length<20
+){
+
+prompts.push(
+`Try ${t}`
+)
+
+}
+
+})
+
+prompts=[
+...new Set(prompts)
+]
+
+let pi=0
+let ci=0
+let back=0
+
+function rotate(){
+
+if(input.value)
+return setTimeout(
+rotate,
+400
+)
+
+let txt=
+prompts[pi]
+
+input.placeholder=
+txt.substring(0,ci)
+
+if(!back){
+
+ci++
+
+if(ci>txt.length){
+
+back=1
+
+return setTimeout(
+rotate,
+1200
+)
+
+}
+
+}else{
+
+ci--
+
+if(ci<0){
+
+back=0
+
+pi=
+(pi+1)
+%
+prompts.length
+
+}
+
+}
+
+setTimeout(
+rotate,
+back?30:70
+)
+
+}
+
+rotate()
+
+/* =====================
+BOT FOLLOW
+===================== */
 
 document.addEventListener(
+"mousemove",
+e=>{
 
-  "mousemove",
+const x=
+(
+innerWidth/2
+-e.clientX
+)/25
 
-  (e)=>{
+const y=
+(
+innerHeight/2
+-e.clientY
+)/25
 
-    const x =
+orb.style.transform=
+`
+rotateY(${-x}deg)
+rotateX(${y}deg)
+`
 
-    (
-      window.innerWidth / 2
-      - e.clientX
-    ) / 25
+})
 
-    const y =
-
-    (
-      window.innerHeight / 2
-      - e.clientY
-    ) / 25
-
-    orb.style.transform =
-
-    `
-    rotateY(${-x}deg)
-    rotateX(${y}deg)
-    `
-  }
-)
-
-
-/* =========================
-   PORTAL
-========================= */
+/* =====================
+PORTAL
+===================== */
 
 function openPortal(){
 
-  document
-  .getElementById(
-    "portal"
-  )
+document
+.getElementById(
+"portal"
+)
 
-  .classList
-  .add("active")
+.classList
+.add("active")
+
 }
 
 function closePortal(){
 
-  document
-  .getElementById(
-    "portal"
-  )
+document
+.getElementById(
+"portal"
+)
 
-  .classList
-  .remove("active")
+.classList
+.remove("active")
+
 }
