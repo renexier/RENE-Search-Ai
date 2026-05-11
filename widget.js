@@ -79,7 +79,10 @@ height:48px;
 border-radius:50%;
 object-fit:cover;
 background:#fff;
-padding:4px
+padding:4px;
+flex-shrink:0;
+box-shadow:
+0 0 24px rgba(170,0,255,.35)
 }
 
 #rene-input{
@@ -88,26 +91,69 @@ background:none;
 border:none;
 outline:none;
 color:#fff;
-font-size:16px
+font-size:16px;
+font-weight:500;
+letter-spacing:.2px
 }
 
 #rene-input::placeholder{
-color:rgba(255,255,255,.45)
+color:rgba(255,255,255,.42)
 }
 
 #rene-btn{
-width:44px;
-height:44px;
+width:46px;
+height:46px;
 border:none;
 border-radius:50%;
-background:linear-gradient(
+display:flex;
+align-items:center;
+justify-content:center;
+background:
+linear-gradient(
 135deg,
 #a855f7,
 #6d5cff
 );
 color:#fff;
-font-size:18px;
-cursor:pointer
+cursor:pointer;
+flex-shrink:0;
+transition:.25s;
+box-shadow:
+0 0 24px rgba(160,90,255,.35)
+}
+
+#rene-btn:hover{
+transform:scale(1.06);
+box-shadow:
+0 0 32px rgba(160,90,255,.55)
+}
+
+@media(max-width:700px){
+
+#rene-search{
+width:94vw;
+bottom:85px
+}
+
+#rene-bar{
+height:66px;
+padding:0 10px
+}
+
+#rene-avatar{
+width:42px;
+height:42px
+}
+
+#rene-btn{
+width:42px;
+height:42px
+}
+
+#rene-input{
+font-size:15px
+}
+
 }
 
 </style>
@@ -121,10 +167,39 @@ id="rene-avatar"
 src="https://raw.githubusercontent.com/renexier/RENE-Search-Ai/main/rene-bot.png"
 >
 
-<input id="rene-input">
+<input
+id="rene-input"
+autocomplete="off"
+>
 
 <button id="rene-btn">
-⌕
+
+<svg
+width="20"
+height="20"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="2.4"
+stroke-linecap="round"
+stroke-linejoin="round"
+>
+
+<circle
+cx="11"
+cy="11"
+r="7">
+</circle>
+
+<line
+x1="21"
+y1="21"
+x2="16.65"
+y2="16.65">
+</line>
+
+</svg>
+
 </button>
 
 </div>
@@ -175,7 +250,8 @@ prompts.push(
 })
 
 prompts.unshift(
-"Navigate with RENE",
+"This is RENE Search",
+"Navigate using RENE",
 "Try home",
 "Try end"
 )
