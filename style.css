@@ -492,3 +492,185 @@ user-drag:none;
 background:transparent;
 color:inherit;
 }
+
+/* =========================
+FLOATING CTA
+========================= */
+
+.rene-floating-tip{
+position:fixed;
+right:120px;
+bottom:128px;
+
+z-index:999998;
+
+display:flex;
+align-items:center;
+
+animation:
+reneFloat 3s ease-in-out infinite;
+}
+
+.tip-path{
+display:flex;
+align-items:center;
+margin-right:14px;
+}
+
+.tip-line{
+width:95px;
+height:2px;
+
+background:
+linear-gradient(
+90deg,
+rgba(168,85,247,.08),
+rgba(168,85,247,.95)
+);
+
+border-radius:999px;
+
+box-shadow:
+0 0 18px rgba(168,85,247,.5);
+}
+
+.tip-arrow{
+display:flex;
+align-items:center;
+justify-content:center;
+
+margin-left:10px;
+
+font-size:28px;
+font-weight:700;
+
+color:#bb86fc;
+
+filter:
+drop-shadow(
+0 0 12px rgba(168,85,247,.65)
+);
+
+animation:
+reneArrow 1.4s ease-in-out infinite;
+}
+
+.tip-box{
+position:relative;
+
+max-width:285px;
+
+padding:18px 20px;
+
+border-radius:24px;
+
+background:
+linear-gradient(
+135deg,
+rgba(18,18,35,.94),
+rgba(10,10,20,.86)
+);
+
+border:
+1px solid rgba(255,255,255,.08);
+
+backdrop-filter:blur(24px);
+
+box-shadow:
+0 0 45px rgba(120,0,255,.16);
+}
+
+.tip-box:before{
+content:"";
+
+position:absolute;
+
+left:-10px;
+top:50%;
+
+transform:
+translateY(-50%)
+rotate(45deg);
+
+width:18px;
+height:18px;
+
+background:
+rgba(18,18,35,.94);
+
+border-left:
+1px solid rgba(255,255,255,.06);
+
+border-bottom:
+1px solid rgba(255,255,255,.06);
+}
+
+.tip-box span{
+font-size:14px;
+line-height:1.8;
+color:rgba(255,255,255,.84);
+}
+
+.tip-box b{
+color:#c084fc;
+}
+
+@keyframes reneFloat{
+
+0%{
+transform:translateY(0px);
+}
+
+50%{
+transform:translateY(-7px);
+}
+
+100%{
+transform:translateY(0px);
+}
+
+}
+
+@keyframes reneArrow{
+
+0%{
+transform:translateX(0);
+opacity:.7;
+}
+
+50%{
+transform:translateX(8px);
+opacity:1;
+}
+
+100%{
+transform:translateX(0);
+opacity:.7;
+}
+
+}
+
+@media(max-width:700px){
+
+.rene-floating-tip{
+right:18px;
+bottom:160px;
+transform:scale(.82);
+transform-origin:right bottom;
+}
+
+.tip-line{
+width:42px;
+}
+
+.tip-box{
+max-width:190px;
+padding:14px 16px;
+}
+
+.tip-box span{
+font-size:12px;
+line-height:1.6;
+}
+
+}
