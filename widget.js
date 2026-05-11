@@ -1,3 +1,16 @@
+(()=>{
+
+if(document.getElementById("rene-search"))
+return
+
+document.body.insertAdjacentHTML("beforeend",`
+
+<link
+href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+rel="stylesheet">
+
+<style>
+
 #rene-search{
 position:fixed;
 left:50%;
@@ -7,7 +20,6 @@ width:min(92vw,760px);
 z-index:999999;
 font-family:Inter,sans-serif;
 transition:.35s;
--webkit-user-select:none;
 user-select:none
 }
 
@@ -31,12 +43,10 @@ rgba(8,8,18,.94),
 rgba(18,18,35,.92)
 );
 backdrop-filter:blur(24px);
--webkit-backdrop-filter:blur(24px);
 border:1px solid rgba(255,255,255,.08);
 box-shadow:
 0 0 40px rgba(120,0,255,.22),
-0 8px 40px rgba(0,0,0,.45),
-inset 0 1px 0 rgba(255,255,255,.05);
+0 8px 40px rgba(0,0,0,.45);
 overflow:hidden;
 position:relative
 }
@@ -51,7 +61,7 @@ height:100%;
 background:linear-gradient(
 90deg,
 transparent,
-rgba(255,255,255,.12),
+rgba(255,255,255,.1),
 transparent
 );
 transform:skewX(-20deg);
@@ -69,13 +79,7 @@ height:48px;
 border-radius:50%;
 object-fit:cover;
 background:#fff;
-padding:4px;
-box-shadow:
-0 0 25px rgba(170,0,255,.45),
-0 0 50px rgba(170,0,255,.18);
-transition:.15s;
-pointer-events:none;
-flex-shrink:0
+padding:4px
 }
 
 #rene-input{
@@ -84,13 +88,11 @@ background:none;
 border:none;
 outline:none;
 color:#fff;
-font-size:16px;
-font-weight:500;
-letter-spacing:.2px
+font-size:16px
 }
 
 #rene-input::placeholder{
-color:rgba(255,255,255,.42)
+color:rgba(255,255,255,.45)
 }
 
 #rene-btn{
@@ -98,72 +100,227 @@ width:44px;
 height:44px;
 border:none;
 border-radius:50%;
-background:
-linear-gradient(
+background:linear-gradient(
 135deg,
 #a855f7,
-#7c4dff
+#6d5cff
 );
 color:#fff;
 font-size:18px;
-cursor:pointer;
-transition:.25s;
-box-shadow:
-0 0 20px rgba(140,0,255,.35)
+cursor:pointer
 }
 
-#rene-btn:hover{
-transform:scale(1.06);
-box-shadow:
-0 0 30px rgba(140,0,255,.55)
+</style>
+
+<div id="rene-search">
+
+<div id="rene-bar">
+
+<img
+id="rene-avatar"
+src="https://raw.githubusercontent.com/renexier/RENE-Search-Ai/main/rene-bot.png"
+>
+
+<input id="rene-input">
+
+<button id="rene-btn">
+⌕
+</button>
+
+</div>
+
+</div>
+
+`)
+
+const s=
+document.getElementById(
+"rene-search"
+)
+
+const i=
+document.getElementById(
+"rene-input"
+)
+
+const b=
+document.getElementById(
+"rene-btn"
+)
+
+const prompts=[]
+
+document.querySelectorAll(
+"h1,h2,h3,a,button,li"
+)
+
+.forEach(e=>{
+
+const t=
+(e.innerText||"")
+.trim()
+.toLowerCase()
+
+if(
+t &&
+t.length<20
+){
+
+prompts.push(
+`Try ${t}`
+)
+
 }
 
-#rene-note{
-position:fixed;
-left:50%;
-bottom:175px;
-transform:translateX(-50%);
-background:rgba(12,12,22,.96);
-color:#fff;
-padding:12px 18px;
-border-radius:18px;
-font-size:14px;
-border:1px solid rgba(255,255,255,.08);
-box-shadow:
-0 0 30px rgba(140,0,255,.25);
-opacity:0;
-pointer-events:none;
-transition:.25s;
-z-index:999999;
-max-width:90vw;
-text-align:center;
-backdrop-filter:blur(20px)
-}
+})
 
-@media(max-width:700px){
+prompts.unshift(
+"Navigate with RENE",
+"Try home",
+"Try end"
+)
 
-#rene-search{
-width:94vw;
-bottom:85px
-}
+let pi=0
+let ci=0
+let back=0
 
-#rene-bar{
-height:66px;
-padding:0 10px
-}
+function rotate(){
 
-#rene-avatar{
-width:42px;
-height:42px
-}
+if(i.value)
+return setTimeout(
+rotate,
+400
+)
 
-#rene-btn{
-width:40px;
-height:40px
-}
+let txt=
+prompts[pi]
 
-#rene-input{
-font-size:15px
-}
+i.placeholder=
+txt.substring(0,ci)
+
+if(!back){
+
+ci++
+
+if(ci>txt.length){
+
+back=1
+
+return setTimeout(
+rotate,
+1200
+)
 
 }
+
+}else{
+
+ci--
+
+if(ci<0){
+
+back=0
+
+pi=
+(pi+1)
+%
+prompts.length
+
+}
+
+}
+
+setTimeout(
+rotate,
+back?35:70
+)
+
+}
+
+rotate()
+
+function search(){
+
+const q=
+i.value
+.trim()
+.toLowerCase()
+
+if(!q)return
+
+if(q==="home"||q==="top"){
+
+scrollTo({
+top:0,
+behavior:"smooth"
+})
+
+return
+
+}
+
+if(q==="end"){
+
+scrollTo({
+top:
+document.body.scrollHeight,
+behavior:"smooth"
+})
+
+return
+
+}
+
+const f=[
+...document.querySelectorAll(
+"h1,h2,h3,p,a,button,li"
+)
+]
+
+.find(x=>
+
+(x.innerText||"")
+.toLowerCase()
+.includes(q)
+
+)
+
+if(f){
+
+f.scrollIntoView({
+
+behavior:"smooth",
+
+block:"center"
+
+})
+
+}
+
+}
+
+b.onclick=search
+
+i.onkeydown=e=>{
+
+if(e.key==="Enter")
+search()
+
+}
+
+addEventListener(
+"scroll",
+()=>{
+
+const end=
+innerHeight+scrollY>=
+document.body.offsetHeight-5
+
+s.classList.toggle(
+"hide",
+end
+)
+
+})
+
+})()
