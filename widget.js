@@ -252,8 +252,8 @@ prompts.push(
 prompts.unshift(
 "This is RENE Search",
 "Navigate using RENE",
-"Try home",
-"Try end"
+"Embed this search bar to your wesbite",
+"Get it fully customized! press i button to know more"
 )
 
 let pi=0
