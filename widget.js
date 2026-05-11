@@ -480,3 +480,56 @@ Date.now()/250
 })
 
 })()
+
+/* =========================
+AUTO HIDE AT END
+========================= */
+
+let lastScroll=0
+
+addEventListener(
+"scroll",
+()=>{
+
+const current=
+scrollY
+
+const atBottom=
+
+innerHeight + current >=
+document.body.scrollHeight - 10
+
+const bar=
+document.getElementById(
+"rene-search"
+)
+
+if(atBottom){
+
+bar.style.opacity="0"
+
+bar.style.transform=
+"translateX(-50%) translateY(120px)"
+
+bar.style.pointerEvents=
+"none"
+
+}else{
+
+if(current < lastScroll){
+
+bar.style.opacity="1"
+
+bar.style.transform=
+"translateX(-50%) translateY(0)"
+
+bar.style.pointerEvents=
+"auto"
+
+}
+
+}
+
+lastScroll=current
+
+})
