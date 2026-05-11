@@ -1,73 +1,51 @@
-const RENE_CONFIG = {
+const RENE_CONFIG={
 
-  /* =========================
-     SMART ROUTES
-  ========================= */
+routes:[
 
-  routes:[
+{
+keywords:[
+"portfolio",
+"projects",
+"work",
+"editing"
+],
+url:"/projects"
+},
 
-    {
-      keywords:[
-        "portfolio",
-        "projects",
-        "work",
-        "editing"
-      ],
+{
+keywords:[
+"about",
+"me",
+"bio"
+],
+url:"/about"
+},
 
-      url:
-      "https://yourwebsite.com/portfolio"
-    },
+{
+keywords:[
+"contact",
+"hire",
+"email",
+"message"
+],
+url:"/#contact"
+},
 
-    {
-      keywords:[
-        "pricing",
-        "plans",
-        "premium",
-        "cost"
-      ],
+{
+keywords:[
+"github",
+"code"
+],
+url:"https://github.com/renexier"
+}
 
-      url:
-      "https://yourwebsite.com/pricing"
-    },
+],
 
-    {
-      keywords:[
-        "contact",
-        "hire",
-        "email"
-      ],
+gptEnabled:false,
 
-      url:
-      "https://yourwebsite.com/contact"
-    },
+openAIKey:"PASTE_API_KEY_HERE",
 
-    {
-      keywords:[
-        "github",
-        "code"
-      ],
-
-      url:
-      "https://github.com/"
-    }
-
-  ],
-
-
-  /* =========================
-     GPT MODE
-  ========================= */
-
-  gptEnabled:false,
-
-  openAIKey:"PASTE_API_KEY_HERE",
-
-
-  /* =========================
-     DEFAULT SEARCH
-  ========================= */
-
-  defaultSearch:
-  "https://google.com/search?q="
+defaultSearch:
+"https://google.com/search?q="
 
 }
