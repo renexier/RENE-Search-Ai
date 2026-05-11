@@ -636,3 +636,30 @@ transition:.25s;
 transform:translateY(-2px);
 box-shadow:0 0 25px rgba(160,90,255,.35);
 }
+.memory-chip{
+animation:chip .3s ease;
+}
+
+@keyframes chip{
+from{
+opacity:0;
+transform:translateY(8px)
+}
+to{
+opacity:1;
+transform:translateY(0)
+}
+}
+
+.rene-mark{
+scroll-margin-top:180px;
+}
+
+::-webkit-scrollbar{
+width:8px
+}
+
+::-webkit-scrollbar-thumb{
+background:rgba(180,120,255,.35);
+border-radius:20px
+}
