@@ -262,21 +262,38 @@ const prompts=[
 
 ]
 
+const used=new Set()
+
 document.querySelectorAll(
 "h1,h2,h3,a,button,li"
 )
 
 .forEach(e=>{
 
-const t=
+let t=
 (e.innerText||"")
 .trim()
 .toLowerCase()
 
+.replace(/\s+/g," ")
+
+.replace(/try /gi,"")
+
+.trim()
+
 if(
+
 t &&
-t.length<22
+
+t.length>2 &&
+
+t.length<22 &&
+
+!used.has(t)
+
 ){
+
+used.add(t)
 
 prompts.push(
 `Try ${t}`
@@ -298,7 +315,9 @@ rotate,
 400
 )
 
-const txt=prompts[pi]
+const txt=[
+...new Set(prompts)
+][pi]
 
 input.placeholder=
 txt.substring(0,ci)
